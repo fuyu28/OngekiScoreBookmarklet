@@ -3,7 +3,9 @@ javascript:(function getSongData() {
   let csvContent = "";
 
   // データを整形する関数
-  const cleanData = (data) => data.replace(/[\s,]+/g, '');
+  const cleanData = (data) => data.replace(/^\s+|\s+$/g, '');
+  // 数値データを整形する関数
+  const cleanNumData = (data) => data.replace(/[\s,]+/g, '');
 
   // CSV行を作成する関数
   const createCsvRow = (dataArray) => `"${dataArray.join('","')}"\n`;
@@ -17,7 +19,7 @@ javascript:(function getSongData() {
       const difficulty = element[i].classList[1].replace("_score_back", "");
       const level = cleanData(songData[0]);
       const songName = cleanData(songData[1]);
-      const score = cleanData(songData[3]);
+      const score = cleanNumData(songData[3]);
       csvContent += createCsvRow([No, songName, difficulty, level, score]);
       No++;
     }
@@ -35,8 +37,8 @@ javascript:(function getSongData() {
       const songName = cleanData(songData[1]);
       const star = cleanData(songData[3]);
       const scoreOrigin = songData[4].split("/");
-      const score = cleanData(scoreOrigin[0]);
-      const max = cleanData(scoreOrigin[1]);
+      const score = cleanNumData(scoreOrigin[0]);
+      const max = cleanNumData(scoreOrigin[1]);
       const percentage = (100 * parseFloat(score) / parseFloat(max)).toFixed(2);
       csvContent += createCsvRow([No, songName, difficulty, level, star, percentage, score, max]);
       No++;
